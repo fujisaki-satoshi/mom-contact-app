@@ -17,7 +17,6 @@ let emailjsLoaded = false;
 
 // 初期化
 document.addEventListener('DOMContentLoaded', () => {
-    console.log('DOMContentLoaded');
     loadEmailJSLibrary();
     initializeElements();
     loadConfig();
@@ -31,8 +30,6 @@ function loadEmailJSLibrary() {
     script.src = 'https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js';
     script.onload = () => {
         emailjsLoaded = true;
-        console.log('EmailJS library loaded');
-        // ライブラリ読み込み後に初期化を試みる
         initEmailJS();
     };
     script.onerror = () => {
@@ -56,19 +53,11 @@ function initializeElements() {
     settingsBtn = document.getElementById('settings-btn');
     
     messageButtons = document.querySelectorAll('.message-btn');
-    
-    console.log('Elements initialized:', {
-        setupScreen: !!setupScreen,
-        mainScreen: !!mainScreen,
-        publicKeyInput: !!publicKeyInput,
-        saveConfigBtn: !!saveConfigBtn
-    });
 }
 
 // 設定の読み込み
 function loadConfig() {
     const savedConfig = localStorage.getItem(CONFIG_KEY);
-    console.log('Saved config:', savedConfig);
     
     if (savedConfig) {
         try {
@@ -78,23 +67,13 @@ function loadConfig() {
             EMAILJS_TEMPLATE_ID = config.templateId || '';
             RECIPIENT_EMAIL = config.email || '';
             
-            console.log('Config loaded:', {
-                hasPublicKey: !!EMAILJS_PUBLIC_KEY,
-                hasServiceId: !!EMAILJS_SERVICE_ID,
-                hasTemplateId: !!EMAILJS_TEMPLATE_ID,
-                hasEmail: !!RECIPIENT_EMAIL
-            });
-            
-            // EmailJSを初期化
             initEmailJS();
-            
             showMainScreen();
         } catch (error) {
             console.error('Error parsing config:', error);
             showSetupScreen();
         }
     } else {
-        console.log('No saved config found');
         showSetupScreen();
     }
 }
@@ -104,13 +83,10 @@ function initEmailJS() {
     if (emailjsLoaded && window.emailjs && EMAILJS_PUBLIC_KEY) {
         try {
             emailjs.init(EMAILJS_PUBLIC_KEY);
-            console.log('EmailJS initialized with key:', EMAILJS_PUBLIC_KEY.substring(0, 5) + '...');
         } catch (error) {
             console.error('Error initializing EmailJS:', error);
         }
     } else if (EMAILJS_PUBLIC_KEY) {
-        console.log('Waiting for EmailJS library...');
-        // ライブラリがまだ読み込まれていない場合は少し待って再試行
         setTimeout(initEmailJS, 100);
     }
 }
@@ -124,7 +100,6 @@ function setupEventListeners() {
     
     // 設定保存ボタン
     saveConfigBtn.addEventListener('click', saveConfig);
-    console.log('Save button listener added');
     
     // Enterキーで設定保存
     if (emailInput) {
@@ -152,25 +127,14 @@ function setupEventListeners() {
             sendMessage(message, e);
         });
     });
-    
-    console.log('Event listeners setup complete');
 }
 
 // 設定の保存
 function saveConfig() {
-    console.log('saveConfig called');
-    
     const publicKey = publicKeyInput.value.trim();
     const serviceId = serviceIdInput.value.trim();
     const templateId = templateIdInput.value.trim();
     const email = emailInput.value.trim();
-    
-    console.log('Input values:', {
-        publicKey: publicKey.substring(0, 5) + '...',
-        serviceId: serviceId,
-        templateId: templateId,
-        email: email
-    });
     
     if (!publicKey || !serviceId || !templateId || !email) {
         alert('すべての項目を入力してください');
@@ -192,14 +156,12 @@ function saveConfig() {
     
     try {
         localStorage.setItem(CONFIG_KEY, JSON.stringify(config));
-        console.log('Config saved to localStorage');
         
         EMAILJS_PUBLIC_KEY = publicKey;
         EMAILJS_SERVICE_ID = serviceId;
         EMAILJS_TEMPLATE_ID = templateId;
         RECIPIENT_EMAIL = email;
         
-        // EmailJSを初期化
         initEmailJS();
         
         // 入力フィールドをクリア
@@ -222,8 +184,6 @@ function saveConfig() {
 
 // メッセージの送信
 async function sendMessage(message, event) {
-    console.log('sendMessage called:', message);
-    
     if (!emailjsLoaded || !window.emailjs) {
         showError('EmailJSライブラリの読み込みに失敗しました。ページを再読み込みしてください。');
         return;
@@ -263,15 +223,11 @@ async function sendMessage(message, event) {
             timestamp: timeString
         };
         
-        console.log('Sending email with params:', templateParams);
-        
         const response = await emailjs.send(
             EMAILJS_SERVICE_ID,
             EMAILJS_TEMPLATE_ID,
             templateParams
         );
-        
-        console.log('Email sent:', response);
         
         if (clickedButton) {
             clickedButton.style.opacity = '1';
@@ -334,8 +290,6 @@ window.hideError = hideError;
 
 // 画面切り替え
 function showSetupScreen() {
-    console.log('showSetupScreen called');
-    
     // 既存の設定値を表示
     const savedConfig = localStorage.getItem(CONFIG_KEY);
     if (savedConfig) {
@@ -355,7 +309,6 @@ function showSetupScreen() {
 }
 
 function showMainScreen() {
-    console.log('showMainScreen called');
     if (setupScreen) setupScreen.classList.add('hidden');
     if (mainScreen) mainScreen.classList.remove('hidden');
 }
@@ -365,7 +318,7 @@ function registerServiceWorker() {
     if ('serviceWorker' in navigator) {
         navigator.serviceWorker.register('service-worker.js')
             .then(registration => {
-                console.log('Service Worker registered:', registration);
+                console.log('Service Worker registered');
             })
             .catch(error => {
                 console.log('Service Worker registration failed:', error);
@@ -379,11 +332,9 @@ let deferredPrompt;
 window.addEventListener('beforeinstallprompt', (e) => {
     e.preventDefault();
     deferredPrompt = e;
-    console.log('PWA install prompt available');
 });
 
 window.addEventListener('appinstalled', () => {
-    console.log('PWA was installed');
     deferredPrompt = null;
 });
 
