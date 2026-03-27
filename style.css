@@ -76,7 +76,10 @@ header h1 {
     font-weight: 600;
 }
 
-#token-input {
+#public-key-input,
+#service-id-input,
+#template-id-input,
+#email-input {
     width: 100%;
     padding: 15px;
     font-size: 1.1rem;
@@ -86,7 +89,10 @@ header h1 {
     transition: border-color 0.3s;
 }
 
-#token-input:focus {
+#public-key-input:focus,
+#service-id-input:focus,
+#template-id-input:focus,
+#email-input:focus {
     outline: none;
     border-color: #667eea;
 }

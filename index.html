@@ -22,12 +22,23 @@
             <div class="setup-box">
                 <h2>⚙️ 初期設定</h2>
                 <p class="setup-text">最初に1回だけ設定が必要です</p>
-                <label for="token-input">LINE Notify トークン:</label>
-                <input type="password" id="token-input" placeholder="トークンを入力してください">
-                <button id="save-token-btn" class="setup-btn">保存して開始</button>
+                
+                <label for="public-key-input">EmailJS Public Key:</label>
+                <input type="text" id="public-key-input" placeholder="Public Keyを入力">
+                
+                <label for="service-id-input">Service ID:</label>
+                <input type="text" id="service-id-input" placeholder="Service IDを入力">
+                
+                <label for="template-id-input">Template ID:</label>
+                <input type="text" id="template-id-input" placeholder="Template IDを入力">
+                
+                <label for="email-input">受信メールアドレス:</label>
+                <input type="email" id="email-input" placeholder="your@email.com">
+                
+                <button id="save-config-btn" class="setup-btn">保存して開始</button>
                 <p class="help-text">
-                    <a href="https://notify-bot.line.me/my/" target="_blank">
-                        トークンの取得方法はこちら
+                    <a href="EMAILJS_SETUP.md" target="_blank">
+                        設定方法の詳細はこちら
                     </a>
                 </p>
             </div>
