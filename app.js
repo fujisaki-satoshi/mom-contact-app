@@ -115,7 +115,7 @@ function setupEventListeners() {
         settingsBtn.addEventListener('click', () => {
             const confirmResult = window.confirm('設定画面に戻りますか？\n（設定を再設定できます）');
             if (confirmResult) {
-                showSetupScreen();
+                showSetupScreen(false); // テストメッセージを送らない
             }
         });
     }
@@ -202,10 +202,31 @@ function saveConfig() {
         
         showMainScreen();
         
-        // テストメッセージを送信
-        setTimeout(() => {
-            sendMessage('✅ かんたん連絡アプリの設定が完了しました！');
-        }, 500);
+        // 設定が変更された場合のみテストメッセージを送信
+        const savedConfig = localStorage.getItem(CONFIG_KEY);
+        let isNewConfig = true;
+        
+        if (savedConfig) {
+            try {
+                const oldConfig = JSON.parse(savedConfig);
+                // 設定が変更されたかチェック
+                isNewConfig = (
+                    oldConfig.publicKey !== publicKey ||
+                    oldConfig.serviceId !== serviceId ||
+                    oldConfig.templateId !== templateId ||
+                    oldConfig.email !== email
+                );
+            } catch (error) {
+                isNewConfig = true;
+            }
+        }
+        
+        // 新規設定または設定変更時のみテストメッセージを送信
+        if (isNewConfig) {
+            setTimeout(() => {
+                sendMessage('🔧 テスト送信: 設定が正常に保存されました。このメッセージが届けば設定完了です。');
+            }, 500);
+        }
     } catch (error) {
         console.error('Error saving config:', error);
         alert('設定の保存に失敗しました: ' + error.message);
@@ -319,7 +340,7 @@ function hideError() {
 window.hideError = hideError;
 
 // 画面切り替え
-function showSetupScreen() {
+function showSetupScreen(sendTestMessage = true) {
     // 既存の設定値を表示
     const savedConfig = localStorage.getItem(CONFIG_KEY);
     if (savedConfig) {
