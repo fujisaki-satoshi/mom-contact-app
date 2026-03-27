@@ -120,9 +120,39 @@ function setupEventListeners() {
         });
     }
     
-    // メッセージボタン
+    // メッセージボタン（長押し対応）
     messageButtons.forEach(button => {
+        let touchStartTime = 0;
+        let isTouchDevice = false;
+        
+        // タッチ開始
+        button.addEventListener('touchstart', (e) => {
+            isTouchDevice = true;
+            touchStartTime = Date.now();
+            // 視覚的フィードバック
+            button.style.opacity = '0.7';
+        }, { passive: true });
+        
+        // タッチ終了（指を離したタイミング）
+        button.addEventListener('touchend', (e) => {
+            e.preventDefault(); // clickイベントの発火を防ぐ
+            button.style.opacity = '1';
+            
+            const message = button.getAttribute('data-message');
+            sendMessage(message, e);
+        });
+        
+        // タッチキャンセル
+        button.addEventListener('touchcancel', (e) => {
+            button.style.opacity = '1';
+        });
+        
+        // クリック（マウス用・PCでのテスト用）
         button.addEventListener('click', (e) => {
+            // タッチデバイスの場合はclickイベントを無視
+            if (isTouchDevice) {
+                return;
+            }
             const message = button.getAttribute('data-message');
             sendMessage(message, e);
         });
