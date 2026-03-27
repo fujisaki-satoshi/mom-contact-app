@@ -1,0 +1,387 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', Meiryo, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+.container {
+    width: 100%;
+    max-width: 600px;
+}
+
+header {
+    text-align: center;
+    color: white;
+    margin-bottom: 20px;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+header h1 {
+    font-size: 2rem;
+    margin-bottom: 8px;
+}
+
+.subtitle {
+    font-size: 1rem;
+    opacity: 0.9;
+}
+
+.screen {
+    transition: opacity 0.3s ease;
+}
+
+.screen.hidden {
+    display: none;
+}
+
+/* 初期設定画面 */
+.setup-box {
+    background: white;
+    border-radius: 20px;
+    padding: 30px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+}
+
+.setup-box h2 {
+    font-size: 1.8rem;
+    margin-bottom: 15px;
+    color: #333;
+    text-align: center;
+}
+
+.setup-text {
+    text-align: center;
+    color: #666;
+    margin-bottom: 25px;
+    font-size: 1.1rem;
+}
+
+.setup-box label {
+    display: block;
+    font-size: 1.1rem;
+    color: #333;
+    margin-bottom: 10px;
+    font-weight: 600;
+}
+
+#token-input {
+    width: 100%;
+    padding: 15px;
+    font-size: 1.1rem;
+    border: 2px solid #ddd;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    transition: border-color 0.3s;
+}
+
+#token-input:focus {
+    outline: none;
+    border-color: #667eea;
+}
+
+.setup-btn {
+    width: 100%;
+    padding: 18px;
+    font-size: 1.3rem;
+    font-weight: bold;
+    color: white;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+}
+
+.setup-btn:active {
+    transform: scale(0.98);
+}
+
+.help-text {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 1rem;
+}
+
+.help-text a {
+    color: #667eea;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+/* メイン画面 */
+.button-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.message-btn {
+    background: white;
+    border: none;
+    border-radius: 20px;
+    padding: 25px 15px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 140px;
+    position: relative;
+    overflow: hidden;
+}
+
+.message-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0) 100%);
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.message-btn:active {
+    transform: scale(0.95);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
+
+.message-btn:active::before {
+    opacity: 1;
+}
+
+.message-btn .icon {
+    font-size: 3rem;
+    margin-bottom: 8px;
+    display: block;
+}
+
+.message-btn .text {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #333;
+    display: block;
+    line-height: 1.3;
+}
+
+.message-btn .subtext {
+    font-size: 0.9rem;
+    color: #666;
+    margin-top: 4px;
+    display: block;
+}
+
+/* ボタンの色分け */
+.message-btn.emergency {
+    background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 100%);
+}
+
+.message-btn.emergency .text,
+.message-btn.emergency .subtext {
+    color: white;
+}
+
+.message-btn.urgent {
+    background: linear-gradient(135deg, #ffd93d 0%, #ffb800 100%);
+}
+
+.message-btn.warning {
+    background: linear-gradient(135deg, #ffa07a 0%, #ff8c69 100%);
+}
+
+.message-btn.success {
+    background: linear-gradient(135deg, #6bcf7f 0%, #4caf50 100%);
+}
+
+.message-btn.success .text {
+    color: white;
+}
+
+.message-btn.info {
+    background: linear-gradient(135deg, #a8daff 0%, #7eb8e6 100%);
+}
+
+.message-btn.thanks {
+    background: linear-gradient(135deg, #dda0dd 0%, #c77dcc 100%);
+}
+
+.message-btn.thanks .text {
+    color: white;
+}
+
+/* 設定ボタン */
+.settings-btn {
+    width: 100%;
+    padding: 15px;
+    font-size: 1.1rem;
+    color: white;
+    background: rgba(255, 255, 255, 0.2);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+    backdrop-filter: blur(10px);
+}
+
+.settings-btn:active {
+    background: rgba(255, 255, 255, 0.3);
+    transform: scale(0.98);
+}
+
+/* フィードバックオーバーレイ */
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    animation: fadeIn 0.3s ease;
+}
+
+.overlay.hidden {
+    display: none;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.feedback-box {
+    background: white;
+    border-radius: 20px;
+    padding: 40px;
+    text-align: center;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+    animation: scaleIn 0.3s ease;
+}
+
+@keyframes scaleIn {
+    from {
+        transform: scale(0.8);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.feedback-box.error {
+    background: #fff5f5;
+}
+
+.feedback-icon {
+    font-size: 4rem;
+    margin-bottom: 15px;
+}
+
+.feedback-text {
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: #333;
+}
+
+.retry-btn {
+    margin-top: 20px;
+    padding: 12px 30px;
+    font-size: 1.1rem;
+    color: white;
+    background: #667eea;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.retry-btn:active {
+    transform: scale(0.95);
+}
+
+/* レスポンシブ対応 */
+@media (max-width: 480px) {
+    header h1 {
+        font-size: 1.6rem;
+    }
+    
+    .subtitle {
+        font-size: 0.9rem;
+    }
+    
+    .button-grid {
+        gap: 12px;
+    }
+    
+    .message-btn {
+        min-height: 120px;
+        padding: 20px 10px;
+    }
+    
+    .message-btn .icon {
+        font-size: 2.5rem;
+    }
+    
+    .message-btn .text {
+        font-size: 1rem;
+    }
+}
+
+/* 横向き対応 */
+@media (orientation: landscape) and (max-height: 500px) {
+    body {
+        padding: 5px;
+    }
+    
+    header {
+        margin-bottom: 10px;
+    }
+    
+    header h1 {
+        font-size: 1.4rem;
+    }
+    
+    .button-grid {
+        gap: 8px;
+    }
+    
+    .message-btn {
+        min-height: 100px;
+        padding: 15px 10px;
+    }
+    
+    .message-btn .icon {
+        font-size: 2rem;
+    }
+    
+    .message-btn .text {
+        font-size: 0.9rem;
+    }
+}
+
+/* Made with Bob */

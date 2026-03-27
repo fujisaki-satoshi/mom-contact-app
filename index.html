@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="かんたん連絡">
+    <title>かんたん連絡アプリ</title>
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="icons/icon-192.png">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📱 かんたん連絡</h1>
+            <p class="subtitle">ボタンを押すだけで連絡できます</p>
+        </header>
+
+        <div id="setup-screen" class="screen">
+            <div class="setup-box">
+                <h2>⚙️ 初期設定</h2>
+                <p class="setup-text">最初に1回だけ設定が必要です</p>
+                <label for="token-input">LINE Notify トークン:</label>
+                <input type="password" id="token-input" placeholder="トークンを入力してください">
+                <button id="save-token-btn" class="setup-btn">保存して開始</button>
+                <p class="help-text">
+                    <a href="https://notify-bot.line.me/my/" target="_blank">
+                        トークンの取得方法はこちら
+                    </a>
+                </p>
+            </div>
+        </div>
+
+        <div id="main-screen" class="screen hidden">
+            <div class="button-grid">
+                <button class="message-btn emergency" data-message="🆘 助けてほしい（緊急）">
+                    <span class="icon">🆘</span>
+                    <span class="text">助けてほしい</span>
+                    <span class="subtext">緊急</span>
+                </button>
+
+                <button class="message-btn urgent" data-message="📞 電話してほしい">
+                    <span class="icon">📞</span>
+                    <span class="text">電話してほしい</span>
+                </button>
+
+                <button class="message-btn warning" data-message="😷 体調が悪い">
+                    <span class="icon">😷</span>
+                    <span class="text">体調が悪い</span>
+                </button>
+
+                <button class="message-btn success" data-message="😊 大丈夫です">
+                    <span class="icon">😊</span>
+                    <span class="text">大丈夫です</span>
+                </button>
+
+                <button class="message-btn info" data-message="💊 薬を飲みました">
+                    <span class="icon">💊</span>
+                    <span class="text">薬を飲みました</span>
+                </button>
+
+                <button class="message-btn info" data-message="🍚 ご飯を食べました">
+                    <span class="icon">🍚</span>
+                    <span class="text">ご飯を食べました</span>
+                </button>
+
+                <button class="message-btn info" data-message="💤 これから寝ます">
+                    <span class="icon">💤</span>
+                    <span class="text">これから寝ます</span>
+                </button>
+
+                <button class="message-btn thanks" data-message="🙏 ありがとう">
+                    <span class="icon">🙏</span>
+                    <span class="text">ありがとう</span>
+                </button>
+            </div>
+
+            <button id="settings-btn" class="settings-btn">⚙️ 設定</button>
+        </div>
+
+        <div id="feedback-overlay" class="overlay hidden">
+            <div class="feedback-box">
+                <div class="feedback-icon">✅</div>
+                <div class="feedback-text">送信しました！</div>
+            </div>
+        </div>
+
+        <div id="error-overlay" class="overlay hidden">
+            <div class="feedback-box error">
+                <div class="feedback-icon">❌</div>
+                <div class="feedback-text">送信できませんでした</div>
+                <button class="retry-btn" onclick="hideError()">閉じる</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
