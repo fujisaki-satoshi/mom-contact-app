@@ -66,14 +66,23 @@ function checkConfig() {
         EMAILJS_TEMPLATE_ID = config.templateId;
         RECIPIENT_EMAIL = config.email;
         
-        // EmailJSを初期化
-        if (emailjsLoaded && window.emailjs) {
-            emailjs.init(EMAILJS_PUBLIC_KEY);
-        }
+        // EmailJSを初期化（ライブラリ読み込み後に再試行）
+        initEmailJS();
         
         showMainScreen();
     } else {
         showSetupScreen();
+    }
+}
+
+// EmailJSの初期化（ライブラリ読み込み待機）
+function initEmailJS() {
+    if (emailjsLoaded && window.emailjs && EMAILJS_PUBLIC_KEY) {
+        emailjs.init(EMAILJS_PUBLIC_KEY);
+        console.log('EmailJS initialized');
+    } else if (EMAILJS_PUBLIC_KEY) {
+        // ライブラリがまだ読み込まれていない場合は少し待って再試行
+        setTimeout(initEmailJS, 100);
     }
 }
 
@@ -139,9 +148,7 @@ function saveConfig() {
     RECIPIENT_EMAIL = email;
     
     // EmailJSを初期化
-    if (emailjsLoaded && window.emailjs) {
-        emailjs.init(EMAILJS_PUBLIC_KEY);
-    }
+    initEmailJS();
     
     // 入力フィールドをクリア
     publicKeyInput.value = '';
@@ -259,6 +266,16 @@ window.hideError = hideError;
 
 // 画面切り替え
 function showSetupScreen() {
+    // 既存の設定値を表示
+    const savedConfig = localStorage.getItem(CONFIG_KEY);
+    if (savedConfig) {
+        const config = JSON.parse(savedConfig);
+        publicKeyInput.value = config.publicKey || '';
+        serviceIdInput.value = config.serviceId || '';
+        templateIdInput.value = config.templateId || '';
+        emailInput.value = config.email || '';
+    }
+    
     setupScreen.classList.remove('hidden');
     mainScreen.classList.add('hidden');
 }
